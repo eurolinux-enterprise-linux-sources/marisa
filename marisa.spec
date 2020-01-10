@@ -1,6 +1,6 @@
 Name:		marisa
 Version:	0.2.4
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Static and spece-efficient trie data structure library
 
 License:	BSD or LGPL
@@ -86,7 +86,7 @@ make %{?_smp_mflags}
 
 # build Perl bindings
 pushd bindings/perl
-%{__perl} Makefile.PL INC="-I%{_builddir}/%{name}-%{version}/lib" LIBS="-L%{_builddir}/%{name}-%{version}/lib/.libs"
+%{__perl} Makefile.PL INC="-I%{_builddir}/%{name}-%{version}/lib" LIBS="-L%{_builddir}/%{name}-%{version}/lib/.libs -lmarisa" INSTALLDIRS=vendor
 make %{?_smp_mflags}
 popd
 
@@ -122,6 +122,7 @@ popd
 
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -name 'perllocal.pod' -exec rm -f {} ';'
+rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/sample.pl
 
 
 %post -p /sbin/ldconfig
@@ -142,8 +143,8 @@ find $RPM_BUILD_ROOT -name 'perllocal.pod' -exec rm -f {} ';'
 %{_bindir}/marisa*
 
 %files perl
-%{perl_sitearch}/*
-%exclude %dir %{perl_sitearch}/auto/
+%{perl_vendorarch}/*
+%exclude %dir %{perl_vendorarch}/auto/
 
 %files python
 %{python_sitearch}/*
@@ -153,6 +154,9 @@ find $RPM_BUILD_ROOT -name 'perllocal.pod' -exec rm -f {} ';'
 
 
 %changelog
+* Tue Dec 06 2016 Parag Nemade <pnemade AT redhat DOT com> - 0.2.4-4
+- Resolves: #1246695 Fix packaging of marisa-perl patch by Yaakov Selkowitz
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.2.4-3
 - Mass rebuild 2014-01-24
 
