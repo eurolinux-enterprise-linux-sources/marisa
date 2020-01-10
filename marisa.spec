@@ -1,6 +1,6 @@
 Name:		marisa
 Version:	0.2.4
-Release:	4%{?dist}
+Release:	1%{?dist}.1
 Summary:	Static and spece-efficient trie data structure library
 
 License:	BSD or LGPL
@@ -86,7 +86,7 @@ make %{?_smp_mflags}
 
 # build Perl bindings
 pushd bindings/perl
-%{__perl} Makefile.PL INC="-I%{_builddir}/%{name}-%{version}/lib" LIBS="-L%{_builddir}/%{name}-%{version}/lib/.libs -lmarisa" INSTALLDIRS=vendor
+%{__perl} Makefile.PL INC="-I%{_builddir}/%{name}-%{version}/lib" LIBS="-L%{_builddir}/%{name}-%{version}/lib/.libs"
 make %{?_smp_mflags}
 popd
 
@@ -122,7 +122,6 @@ popd
 
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -name 'perllocal.pod' -exec rm -f {} ';'
-rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/sample.pl
 
 
 %post -p /sbin/ldconfig
@@ -143,8 +142,8 @@ rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/sample.pl
 %{_bindir}/marisa*
 
 %files perl
-%{perl_vendorarch}/*
-%exclude %dir %{perl_vendorarch}/auto/
+%{perl_sitearch}/*
+%exclude %dir %{perl_sitearch}/auto/
 
 %files python
 %{python_sitearch}/*
@@ -154,15 +153,6 @@ rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/sample.pl
 
 
 %changelog
-* Tue Dec 06 2016 Parag Nemade <pnemade AT redhat DOT com> - 0.2.4-4
-- Resolves: #1246695 Fix packaging of marisa-perl patch by Yaakov Selkowitz
-
-* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.2.4-3
-- Mass rebuild 2014-01-24
-
-* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.2.4-2
-- Mass rebuild 2013-12-27
-
 * Wed Sep  4 2013 Daiki Ueno <dueno@redhat.com> - 0.2.4-1.1
 - use 'ruby(release)' on RHEL 7 as well as Fedora 19 (Closes: #1002870)
 - disable workaround for ruby bindings needed for earlier Fedora 19
